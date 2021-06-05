@@ -21,4 +21,5 @@ app.use('/api', routes);
 app.use('/uploads', express.static('uploads'));
 
 app.use(errorHandler);
-app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
+const PORT = process.env.PORT || APP_PORT;
+app.listen(PORT, () => console.log(`Listening on port ${PORT}.`));
