@@ -31,19 +31,19 @@ const productController = {
             // }
             const filePath = req.file.path;
             // validation
-            const { error } = productSchema.validate(req.body);
-            if (error) {
-                // Delete the uploaded file
-                fs.unlink(`${appRoot}/${filePath}`, (err) => {
-                    if (err) {
-                        return next(
-                            CustomErrorHandler.serverError(err.message)
-                        );
-                    }
-                });
-                return next(error);
-                // rootfolder/uploads/filename.png
-            }
+            // const { error } = productSchema.validate(req.body);
+            // if (error) {
+            //     // Delete the uploaded file
+            //     fs.unlink(`${appRoot}/${filePath}`, (err) => {
+            //         if (err) {
+            //             return next(
+            //                 CustomErrorHandler.serverError(err.message)
+            //             );
+            //         }
+            //     });
+            //     return next(error);
+            //     // rootfolder/uploads/filename.png
+            // }
 
             const { name, price, size } = req.body;
             let document;
