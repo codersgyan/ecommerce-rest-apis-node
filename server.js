@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/api', routes);
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/', (req, res) => {
     res.send(`
   <h1>Welcome to E-commerce Rest APIs</h1>
