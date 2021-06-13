@@ -25,13 +25,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/api', routes);
 app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
-// app.use('/', (req, res) => {
-//     res.send(`
-//   <h1>Welcome to E-commerce Rest APIs</h1>
-//   You may contact me <a href="https://codersgyan.com/links/">here</a>
-//   Or You may reach out to me for any question related to this Apis: codersgyan@gmail.com
-//   `);
-// });
+app.use('/', (req, res) => {
+    res.send(`
+  <h1>Welcome to E-commerce Rest APIs</h1>
+  You may contact me <a href="https://codersgyan.com/links/">here</a>
+  Or You may reach out to me for any question related to this Apis: codersgyan@gmail.com
+  `);
+});
 
 app.use(errorHandler);
 const PORT = process.env.PORT || APP_PORT;
