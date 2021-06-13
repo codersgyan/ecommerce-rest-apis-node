@@ -8,31 +8,39 @@ import productSchema from '../validators/productValidator';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) =>  {
-        const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+    filename: (req, file, cb) => {
+        const uniqueName = `${Date.now()}-${Math.round(
+            Math.random() * 1e9
+        )}${path.extname(file.originalname)}`;
         // 3746674586-836534453.png
         cb(null, uniqueName);
-    }
+    },
 });
 
-const handleMultipartData = multer({ storage, limits: { fileSize: 1000000 * 5 } }).single('image') // 5mb
-
+const handleMultipartData = multer({
+    storage,
+    limits: { fileSize: 1000000 * 5 },
+}).single('image'); // 5mb
 
 const productController = {
     async store(req, res, next) {
         // Multipart form data
         handleMultipartData(req, res, async (err) => {
             if (err) {
-                return next(CustomErrorHandler.serverError(err.message))
+                console.log(err);
+                return next(CustomErrorHandler.serverError(err.message));
             }
             const filePath = req.file.path;
             // validation
             const { error } = productSchema.validate(req.body);
             if (error) {
+                console.log(err);
                 // Delete the uploaded file
                 fs.unlink(`${appRoot}/${filePath}`, (err) => {
                     if (err) {
-                        return next(CustomErrorHandler.serverError(err.message));
+                        return next(
+                            CustomErrorHandler.serverError(err.message)
+                        );
                     }
                 });
 
@@ -47,19 +55,18 @@ const productController = {
                     name,
                     price,
                     size,
-                    image: filePath
+                    image: filePath,
                 });
-            } catch(err) {
+            } catch (err) {
                 return next(err);
             }
             res.status(201).json(document);
         });
-
     },
     update(req, res, next) {
         handleMultipartData(req, res, async (err) => {
             if (err) {
-                return next(CustomErrorHandler.serverError(err.message))
+                return next(CustomErrorHandler.serverError(err.message));
             }
             let filePath;
             if (req.file) {
@@ -73,7 +80,9 @@ const productController = {
                 if (req.file) {
                     fs.unlink(`${appRoot}/${filePath}`, (err) => {
                         if (err) {
-                            return next(CustomErrorHandler.serverError(err.message));
+                            return next(
+                                CustomErrorHandler.serverError(err.message)
+                            );
                         }
                     });
                 }
@@ -85,13 +94,17 @@ const productController = {
             const { name, price, size } = req.body;
             let document;
             try {
-                document = await Product.findOneAndUpdate({ _id: req.params.id }, {
-                    name,
-                    price,
-                    size,
-                    ...(req.file && { image: filePath })
-                }, { new: true });
-            } catch(err) {
+                document = await Product.findOneAndUpdate(
+                    { _id: req.params.id },
+                    {
+                        name,
+                        price,
+                        size,
+                        ...(req.file && { image: filePath }),
+                    },
+                    { new: true }
+                );
+            } catch (err) {
                 return next(err);
             }
             res.status(201).json(document);
@@ -110,15 +123,17 @@ const productController = {
             if (err) {
                 return next(CustomErrorHandler.serverError());
             }
-           return res.json(document);
+            return res.json(document);
         });
     },
     async index(req, res, next) {
         let documents;
         // pagination mongoose-pagination
         try {
-            documents = await Product.find().select('-updatedAt -__v').sort({ _id: -1 });
-        } catch(err) {
+            documents = await Product.find()
+                .select('-updatedAt -__v')
+                .sort({ _id: -1 });
+        } catch (err) {
             return next(CustomErrorHandler.serverError());
         }
         return res.json(documents);
@@ -126,8 +141,10 @@ const productController = {
     async show(req, res, next) {
         let document;
         try {
-            document = await Product.findOne({ _id: req.params.id }).select('-updatedAt -__v');
-        } catch(err) {
+            document = await Product.findOne({ _id: req.params.id }).select(
+                '-updatedAt -__v'
+            );
+        } catch (err) {
             return next(CustomErrorHandler.serverError());
         }
         return res.json(document);
@@ -135,12 +152,14 @@ const productController = {
     async getProducts(req, res, next) {
         let documents;
         try {
-            documents = await Product.find({'_id': { $in: req.body.ids }}).select('-updatedAt -__v');
-        } catch(err) {
+            documents = await Product.find({
+                _id: { $in: req.body.ids },
+            }).select('-updatedAt -__v');
+        } catch (err) {
             return next(CustomErrorHandler.serverError());
         }
         return res.json(documents);
-    }
-}
+    },
+};
 
 export default productController;
