@@ -27,24 +27,25 @@ const productController = {
         // Multipart form data
         handleMultipartData(req, res, async (err) => {
             if (err) {
-                return next(CustomErrorHandler.serverError(err.message));
+                console.log(err);
+                // return next(CustomErrorHandler.serverError(err.message));
             }
             const filePath = req.file.path;
             // validation
-            const { error } = productSchema.validate(req.body);
-            if (error) {
-                // Delete the uploaded file
-                fs.unlink(`${appRoot}/${filePath}`, (err) => {
-                    if (err) {
-                        return next(
-                            CustomErrorHandler.serverError(err.message)
-                        );
-                    }
-                });
+            // const { error } = productSchema.validate(req.body);
+            // if (error) {
+            //     // Delete the uploaded file
+            //     fs.unlink(`${appRoot}/${filePath}`, (err) => {
+            //         if (err) {
+            //             return next(
+            //                 CustomErrorHandler.serverError(err.message)
+            //             );
+            //         }
+            //     });
 
-                return next(error);
-                // rootfolder/uploads/filename.png
-            }
+            //     return next(error);
+            //     // rootfolder/uploads/filename.png
+            // }
 
             const { name, price, size } = req.body;
             let document;
@@ -56,7 +57,8 @@ const productController = {
                     image: filePath,
                 });
             } catch (err) {
-                return next(err);
+                console.log(err);
+                // return next(err);
             }
             res.status(201).json(document);
         });
