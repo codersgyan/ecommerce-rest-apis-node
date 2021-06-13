@@ -26,19 +26,16 @@ const productController = {
     async store(req, res, next) {
         // Multipart form data
         handleMultipartData(req, res, async (err) => {
-            if (err) {
-                console.log('in multipart');
-                return next(CustomErrorHandler.serverError(err.message));
-            }
+            // if (err) {
+            //     return next(CustomErrorHandler.serverError(err.message));
+            // }
             const filePath = req.file.path;
             // validation
             const { error } = productSchema.validate(req.body);
             if (error) {
-                console.log('after validation');
                 // Delete the uploaded file
                 fs.unlink(`${appRoot}/${filePath}`, (err) => {
                     if (err) {
-                        console.log('after delete');
                         return next(
                             CustomErrorHandler.serverError(err.message)
                         );
@@ -51,7 +48,6 @@ const productController = {
             const { name, price, size } = req.body;
             let document;
             try {
-                console.log('coming here before product create');
                 document = await Product.create({
                     name,
                     price,
@@ -59,7 +55,6 @@ const productController = {
                     image: filePath,
                 });
             } catch (err) {
-                console.log('coming here after product create in catch');
                 return next(err);
             }
             res.status(201).json(document);
