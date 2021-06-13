@@ -1,5 +1,5 @@
-import { User } from "../models"
-import CustomErrorHandler from "../services/CustomErrorHandler";
+import { User } from '../models';
+import CustomErrorHandler from '../services/CustomErrorHandler';
 
 const admin = async (req, res, next) => {
     try {
@@ -9,9 +9,10 @@ const admin = async (req, res, next) => {
         } else {
             return next(CustomErrorHandler.unAuthorized());
         }
-    } catch(err) {
+    } catch (err) {
+        console.log(err);
         return next(CustomErrorHandler.serverError());
     }
-}
+};
 
 export default admin;
