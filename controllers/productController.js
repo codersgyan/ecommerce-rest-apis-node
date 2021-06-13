@@ -55,7 +55,7 @@ const productController = {
                     image: filePath,
                 });
             } catch (err) {
-                return next(err);
+                // return next(err);
             }
             res.status(201).json(document);
         });
