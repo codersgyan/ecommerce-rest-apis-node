@@ -27,14 +27,12 @@ const productController = {
         // Multipart form data
         handleMultipartData(req, res, async (err) => {
             if (err) {
-                console.log(err);
                 return next(CustomErrorHandler.serverError(err.message));
             }
             const filePath = req.file.path;
             // validation
             const { error } = productSchema.validate(req.body);
             if (error) {
-                console.log(err);
                 // Delete the uploaded file
                 fs.unlink(`${appRoot}/${filePath}`, (err) => {
                     if (err) {
