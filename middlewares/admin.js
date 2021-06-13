@@ -10,8 +10,7 @@ const admin = async (req, res, next) => {
             return next(CustomErrorHandler.unAuthorized());
         }
     } catch (err) {
-        console.log(err);
-        return next(CustomErrorHandler.serverError());
+        return next(CustomErrorHandler.serverError(err.message));
     }
 };
 
