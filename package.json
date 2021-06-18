@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r esm server.js",
-    "start": "node -r esm server.js"
+    "dev": "nodemon  -r esm server.js",
+    "start": "NODE_ENV=production node -r esm server.js"
   },
   "keywords": [],
   "author": "Julien Bisconti <julienbi@unity3d.com>",
